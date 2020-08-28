@@ -1,15 +1,18 @@
 var apiKey ="ac1e7dcc53990d9a176a8400fd79a52b"
+// added local storage
 var pCities = JSON.parse(localStorage.getItem("weather")) || []
 $("#search").click(function (){
     var citySearch = $("#citySearch").val()
     console.log (citySearch)
     getWeather(citySearch)
     pCities.unshift(citySearch)
+    // saves city searched, converts array to string
     localStorage.setItem("weather", JSON.stringify(pCities))
     renderList()
 })
 function getWeather(citySearch){
     $(".current").empty()
+    // added empty to prevent results from stacking 
     $.get(`https://api.openweathermap.org/data/2.5/weather?q=${citySearch}&units=imperial&appid=${apiKey}`)
     .then(function(results){
         console.log(results)
@@ -31,6 +34,7 @@ function getWeather(citySearch){
     })
 }
 function fiveDay(city){
+    // five day forecast
     $.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${apiKey}`)
     .then(function(results){
         console.log(results)
@@ -53,6 +57,7 @@ function fiveDay(city){
 }
 
 function renderList(){
+    // this saves cities searched by user
     $("#previousCities").empty()
     for (var i = 0; i < pCities.length; i++){
         var divList = $("<div class='card text-center previousCity'>").text(pCities[i])
